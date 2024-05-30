@@ -27,6 +27,7 @@ npm run dev
 ```
 
 #### Setup back-end
+เปลี่ยน env back-end SENDGRID_API_KEY อยู่ในคู่มือ เอกสารโปรเจกต์
 
 ```javascript
 // เข้าไปที่ ไฟล์ back-end
