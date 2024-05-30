@@ -202,7 +202,7 @@ export default {
   },
   methods: {
     login() {
-      this.setLogin(true);
+      this.setLogin('login');
     },
     async submit() {
       this.$store.dispatch('user/createUser', this.inputForm);

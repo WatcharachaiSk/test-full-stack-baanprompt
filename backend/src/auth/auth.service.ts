@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
+import { ConflictException, HttpException, HttpStatus, Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { AuthGuard } from './auth.guard';
 import { UserService } from 'src/user/user.service';
@@ -7,9 +7,10 @@ import { MailService } from '@sendgrid/mail';
 import { config } from 'dotenv';
 import * as bcrypt from 'bcrypt';
 import { LoginDto } from './dto/login';
+import { AgainVerifyDto } from './dto/again-verify';
 
 config(); // loads environment variables from .env file
-const { SENDGRID_API_KEY, URL_BASE } = process.env;
+const { SENDGRID_API_KEY, URL_BASE, URL_BASE_FE } = process.env;
 @Injectable()
 export class AuthService {
   constructor(
@@ -66,8 +67,25 @@ export class AuthService {
     try {
       const verify = await this.authGuard.verifyEmaile(token)
       if (verify) {
+
         const result = await this.userService.verifyEmailSeccess(verify.user.email)
-        return `verify email is  success ${result.email}`
+        return `
+        <div style="display: flex; justify-content: center; align-items: center; height: 100vh; text-align: center;">
+          <div>
+            <p>Verify email is success ${result.email}</p>
+            <a href="${URL_BASE_FE}" style="
+              display: inline-block;
+              padding: 10px 20px;
+              margin-top: 20px;
+              font-size: 16px;
+              color: #fff;
+              background-color: #007bff;
+              border-radius: 5px;
+              text-decoration: none;
+            ">Go to Login</a>
+          </div>
+        </div>
+      `;
       } else {
         return 'verify email error'
       }
@@ -76,9 +94,32 @@ export class AuthService {
     }
   }
 
+  async againSendVerificationEmail(againVerifyDto: AgainVerifyDto) {
+    const user = await this.userService.findOneEmail(againVerifyDto.email);
+    if (!user) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
+    if (!user.isActive) {
+      throw new HttpException('User not active', HttpStatus.FORBIDDEN);
+    }
+    if (user.verify) {
+      throw new ConflictException('Email verified exists');
+    }
+    try {
+      const { password, ...response } = user
+      const token = this.generateVerificationToken(response.email)
+      await this.sendVerificationEmail(response.email, token)
+      return response
+    } catch (error) {
+      throw error
+    }
+
+  }
+
   async sendVerificationEmail(email: string, token: string): Promise<void> {
     const url = `${URL_BASE}/auth/verify-email?token=${token}`;
     const expiryTime = '1 day';
+
     const msg = {
       to: email,
       from: 'watcharachai.sk@gmail.com',

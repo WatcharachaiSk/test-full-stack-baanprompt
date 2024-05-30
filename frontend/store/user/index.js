@@ -17,6 +17,11 @@ const actions = {
           title: 'THANKS FOR SIGNING UP',
           text: `Verify Your E-Mail ${response.data.email} Address`,
           icon: 'success',
+          confirmButtonText: 'Login',
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            window.location.reload();
+          }
         });
       }
     } catch (error) {
@@ -39,7 +44,6 @@ const actions = {
       sweet_toast('top-end', 'success', 'เข้าสู่ระบบเสร็จสิ้น');
       this.$router.push(Rotuers.home);
     } catch (error) {
-      console.log('error.response is ', error.response);
       if (error.response.status == 401 || error.response.status == 404) {
         sweet_popUpTimer('center', 'warning', 4000, 'บัญชีผู้ใช้งานไม่ถูกต้อง', 'กรุณาตรวจสอบ email และ password อีกครั้ง');
       } else if (error.response.status == 403) {
@@ -50,6 +54,35 @@ const actions = {
           sweet_popUpTimer('center', 'error', 4000, 'บัญชีผู้ใช้งานถูกปิดใช้งาน', 'กรุณาติดต่อผู้ดูแลระบบเพื่อขอเปิดใช้งานอีกครั้ง');
         }
       } else {
+        sweet_popUpTimer('center', 'error', 4000, 'การบันทึกข้อมูลผิดพลาด ทาง Server', 'กรุณาลองใหม่อีกครั้ง');
+      }
+    }
+  },
+  async resendEmail({ commit }, payload) {
+    const url = Endpoints.ResendEmail;
+
+    try {
+      const response = await this.$axios.post(url, payload);
+      if (response.status == 200 || response.status == 201) {
+        Swal.fire({
+          title: 'Resend Email Seccess',
+          text: `Verify Your E-Mail ${response.data.email} Address`,
+          icon: 'success',
+          confirmButtonText: 'Login',
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            window.location.reload();
+          }
+        });
+      }
+    } catch (error) {
+      if (error.response.status == 409) {
+        sweet_popUpTimer('center', 'warning', 4000, 'Email verified exists', 'Email verified successfully');
+      } else if (error.response.status == 400) {
+        sweet_popUpTimer('center', 'warning', 4000, 'ข้อมูลไม่ครบหรือผิดพลาด', 'กรุณาตรวจสอบข้อมูลของท่านให้ครบถ้วน');
+      } else if (error.response.status == 404) {
+        sweet_popUpTimer('center', 'warning', 4000, 'บัญชีผู้ใช้งานไม่ถูกต้อง', 'กรุณาตรวจสอบ email อีกครั้ง');
+      } else if (error.response.status >= 500) {
         sweet_popUpTimer('center', 'error', 4000, 'การบันทึกข้อมูลผิดพลาด ทาง Server', 'กรุณาลองใหม่อีกครั้ง');
       }
     }
