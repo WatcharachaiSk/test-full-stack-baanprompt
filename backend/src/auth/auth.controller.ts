@@ -1,4 +1,28 @@
-import { Controller } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Post, Query } from '@nestjs/common';
+import { AuthService } from './auth.service';
+import { CreateUserDto } from 'src/user/dto/create-user.dto';
+import { LoginDto } from './dto/login';
 
 @Controller('auth')
-export class AuthController {}
+export class AuthController {
+  constructor(private readonly authService: AuthService) {
+
+  }
+
+  @Get('/verify-email')
+  verifyEmaile(@Query('token') token: string) {
+    return this.authService.verifyEmaile(token);
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Post('/login')
+  signIn(@Body() loginDto: LoginDto) {
+    return this.authService.signIn(loginDto);
+  }
+
+  @Post('/register')
+  create(@Body() createUserDto: CreateUserDto) {
+    return this.authService.create(createUserDto);
+  }
+
+}

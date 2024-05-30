@@ -27,6 +27,12 @@ export class UserEntity extends BaseEntity {
   @Column({ name: "phone_number", nullable: true })
   phoneNumber: string
 
+  @Column({ name: "verify", default: false })
+  verify: boolean
+
+  @Column({ name: "isActive", default: true })
+  isActive: boolean
+
   async hashPassword(password: string, saltOrRounds: number) {
     return await bcrypt.hash(password, saltOrRounds);
   }
