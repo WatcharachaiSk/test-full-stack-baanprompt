@@ -44,7 +44,7 @@ npm run dev
 #### ถ้าหากว่า การ Send email eroor 401 ให้เปลี่ยน env back-end SENDGRID_API_KEY
 
 ```javascript
-SENDGRID_API_KEY อยู่ในคู่มือ
+SENDGRID_API_KEY อยู่ในคู่มือ เอกสารโปรเจกต์
 ```
 
 #### แล้วทำการ back-end ใหม่
