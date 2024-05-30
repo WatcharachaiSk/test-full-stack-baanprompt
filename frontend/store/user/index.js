@@ -26,7 +26,7 @@ const actions = {
       }
     } catch (error) {
       if (error.response.status == 409) {
-        sweet_popUpTimer('center', 'warning', 4000, 'รหัสผู้ใช้งานถูกใช้ไปแล้ว', 'กรุณาเปลี่ยนรหัสผู้ใช้งานใหม่');
+        sweet_popUpTimer('center', 'warning', 4000, 'Email ถูกใช้ไปแล้ว', 'กรุณาเปลี่ยน Email ใหม่');
       } else if (error.response.status == 400) {
         sweet_popUpTimer('center', 'warning', 4000, 'ข้อมูลไม่ครบหรือผิดพลาด', 'กรุณาตรวจสอบข้อมูลของท่านให้ครบถ้วน');
       } else if (error.response.status >= 500) {
