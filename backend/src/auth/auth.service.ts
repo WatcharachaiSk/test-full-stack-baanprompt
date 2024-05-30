@@ -27,14 +27,15 @@ export class AuthService {
     if (!user) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
-    if (!user.isActive) {
-      throw new HttpException('User not active', HttpStatus.FORBIDDEN);
-    }
-    if (!user.verify) {
-      throw new HttpException('Email not verified', HttpStatus.FORBIDDEN);
-    }
-    if (bcrypt.compareSync(loginDto.password, user.password)) {
-      const { password, ...result } = user;
+
+    if (bcrypt.compareSync(loginDto?.password, user?.password)) {
+
+      if (!user.isActive) {
+        throw new HttpException('User not active', HttpStatus.FORBIDDEN);
+      }
+      if (!user.verify) {
+        throw new HttpException('Email not verified', HttpStatus.FORBIDDEN);
+      }
       const payload = { sub: user.id, username: user.email };
       return {
         access_token: await this.jwtService.signAsync(payload),
