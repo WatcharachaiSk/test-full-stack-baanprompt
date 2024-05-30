@@ -1,4 +1,4 @@
-const rotuers = {
+const Rotuers = {
   home: "/",
 };
-export default rotuers;
+export default Rotuers;

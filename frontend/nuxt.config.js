@@ -33,12 +33,51 @@ export default {
     "@nuxtjs/axios",
     "@nuxtjs/composition-api/module",
     "@nuxtjs/dotenv",
+    "@nuxtjs/auth-next", //TODO auth
   ],
-
-  axios: {
-    baseURL: process.env.BASE_API,
+  auth: {
+    //TODO auth
+    strategies: {
+      local: {
+        token: {
+          prefix: "_token.",
+          property: "token",
+          global: true,
+          maxAge: 1800,
+        },
+        user: {
+          property: false,
+          autoFetch: false,
+        },
+        refreshToken: {
+          property: "refresh_token",
+          data: "refresh_token",
+          maxAge: 60 * 60 * 24 * 30,
+        },
+        endpoints: {
+          login: {
+            url: "/auth/login",
+            method: "post",
+            propertyName: "data.accessToken",
+          },
+          user: { url: "/auth/profile", method: "get", propertyName: "data" },
+          logout: false,
+        },
+      },
+    },
+    redirect: {
+      login: "/auth",
+    },
+    localStorage: {
+      prefix: "auth",
+    },
   },
-  router: {},
+  router: {
+    middleware: ["auth"], //TODO auth
+  },
+  axios: {
+    baseURL: process.env.BASE_API || "http://localhost:3500/api",
+  },
   build: {
     transpile: ["@amcharts/amcharts5"],
     transpile: ["vee-validate/dist/rules"],

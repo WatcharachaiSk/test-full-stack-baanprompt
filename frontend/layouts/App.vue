@@ -1,7 +1,6 @@
 <template>
-  <div class="bg-slate-50 w-full h-full">
+  <div class="flex flex-col w-full h-full">
     <TheNavbar />
-    <TheSidebar />
     <Nuxt />
   </div>
 </template>

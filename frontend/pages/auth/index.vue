@@ -12,6 +12,7 @@
 import Register from "@/components/users/Register.vue";
 import Login from "@/components/users/Login.vue";
 export default {
+  middleware: "guest",
   components: { Register: Register, Login: Login },
   data() {
     return {
