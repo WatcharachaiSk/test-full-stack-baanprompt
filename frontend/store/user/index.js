@@ -30,7 +30,11 @@ const actions = {
       } else if (error.response.status == 400) {
         sweet_popUpTimer('center', 'warning', 4000, 'ข้อมูลไม่ครบหรือผิดพลาด', 'กรุณาตรวจสอบข้อมูลของท่านให้ครบถ้วน');
       } else if (error.response.status >= 500) {
-        sweet_popUpTimer('center', 'error', 4000, 'การบันทึกข้อมูลผิดพลาด ทาง Server', 'กรุณาลองใหม่อีกครั้ง');
+        if (error.response.data.message == 'Failed to send email') {
+          sweet_popUpTimer('center', 'error', 4000, 'Failed to send email', 'กรุณาลองเปลี่ยน SENDGRID_API_KEY');
+        } else {
+          sweet_popUpTimer('center', 'error', 4000, 'การบันทึกข้อมูลผิดพลาด ทาง Server', 'กรุณาลองใหม่อีกครั้ง');
+        }
       }
     }
   },
@@ -83,7 +87,11 @@ const actions = {
       } else if (error.response.status == 404) {
         sweet_popUpTimer('center', 'warning', 4000, 'บัญชีผู้ใช้งานไม่ถูกต้อง', 'กรุณาตรวจสอบ email อีกครั้ง');
       } else if (error.response.status >= 500) {
-        sweet_popUpTimer('center', 'error', 4000, 'การบันทึกข้อมูลผิดพลาด ทาง Server', 'กรุณาลองใหม่อีกครั้ง');
+        if (error.response.data.message == 'Failed to send email') {
+          sweet_popUpTimer('center', 'error', 4000, 'Failed to send email', 'กรุณาลองเปลี่ยน SENDGRID_API_KEY');
+        } else {
+          sweet_popUpTimer('center', 'error', 4000, 'การบันทึกข้อมูลผิดพลาด ทาง Server', 'กรุณาลองใหม่อีกครั้ง');
+        }
       }
     }
   },

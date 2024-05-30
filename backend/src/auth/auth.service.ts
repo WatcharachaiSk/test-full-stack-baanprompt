@@ -66,7 +66,7 @@ export class AuthService {
   async verifyEmaile(token: string) {
     try {
       const verify = await this.authGuard.verifyEmaile(token)
-      if (verify) {
+      if (verify.isSeccess) {
 
         const result = await this.userService.verifyEmailSeccess(verify.user.email)
         return `
@@ -87,7 +87,13 @@ export class AuthService {
         </div>
       `;
       } else {
-        return 'verify email error'
+        return `
+        <div style="display: flex; justify-content: center; align-items: center; height: 100vh; text-align: center;">
+          <div>
+            <p>verify email error</p>
+          </div>
+        </div>
+      `;
       }
     } catch (error) {
       throw error

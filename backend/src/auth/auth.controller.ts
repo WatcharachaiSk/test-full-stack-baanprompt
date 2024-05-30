@@ -15,7 +15,7 @@ export class AuthController {
   verifyEmaile(@Query('token') token: string) {
     return this.authService.verifyEmaile(token);
   }
-  
+
   @Post('/resend-verify-email')
   againSendVerificationEmail(@Body() againVerifyDto: AgainVerifyDto) {
     return this.authService.againSendVerificationEmail(againVerifyDto);
@@ -24,8 +24,6 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @Post('/login')
   signIn(@Body() loginDto: LoginDto) {
-    console.log("loginDto is", loginDto);
-
     return this.authService.signIn(loginDto);
   }
 

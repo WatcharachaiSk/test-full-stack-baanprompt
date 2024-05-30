@@ -215,7 +215,6 @@ export default {
         thaiLastName !== '' &&
         engFirsName !== '' &&
         engLastName !== '' &&
-        phoneNumber !== '' &&
         email !== '' &&
         password !== '' &&
         confirmPassword !== '';
